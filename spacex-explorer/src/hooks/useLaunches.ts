@@ -4,13 +4,13 @@ import { endpoints } from "../api/spacex";
 import type { Launch } from "../types/spacex";
 
 export type Filters = {
-    q: string
+    query: string
     year: string | 'all'
     status: 'all' | 'success' | 'failed'
     sort: 'newest' | 'oldest'
 }
 
-const DEFAULT: Filters = { q: '', year: 'all', status: 'all', sort: 'newest'}
+const DEFAULT: Filters = { query: '', year: 'all', status: 'all', sort: 'newest'}
 
 export function useLaunches(pageSize = 12) {
     const { data , loading , error} = useFetch<Launch[]>({ url: endpoints.launches, cache: true})
@@ -18,20 +18,30 @@ export function useLaunches(pageSize = 12) {
     const [page, setPage] = useState(1)
 
     const filtered = useMemo(() => {
-        const list = data ?? []
-        return list
-            .filter(l => (filters.q ? l.name.toLocaleLowerCase().includes(filters.q.toLocaleLowerCase()) : true))
-            .filter(l => (filters.year === 'all' ? true : new Date(l.date_utc).getUTCFullYear().toString() === filters.year))
-            .filter(l => {
+        const launches = data ?? []
+        return launches
+            //Search filter
+            .filter(launch => (
+                filters.query ? launch.name.toLocaleLowerCase().includes(filters.query.toLocaleLowerCase()) : true
+            ))
+            // Year filter
+            .filter(launch => (
+                filters.year === 'all' 
+                    ? true 
+                    : new Date(launch.date_utc).getUTCFullYear().toString() === filters.year
+                ))
+            //Status filter
+            .filter(launch => {
                 if (filters.status === 'all') return true
-                if (filters.status === 'success') return l.success === true
-                return l.success === false
+                if (filters.status === 'success') return launch.success === true
+                return launch.success === false
             })
-            .sort((a ,b) => {
-                const da = +new Date(a.date_utc)
-                const db = +new Date(b.date_utc)
+            // sorting
+            .sort((launchA ,launchB) => {
+                const dateA = +new Date(launchA.date_utc)
+                const dateB = +new Date(launchB.date_utc)
 
-                return filters.sort === 'newest' ? db - da : da - db
+                return filters.sort === 'newest' ? dateB - dateA : dateA - dateB
             })
     },[data, filters])
 
