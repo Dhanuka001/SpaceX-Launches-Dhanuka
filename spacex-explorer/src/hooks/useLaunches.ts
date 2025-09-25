@@ -35,6 +35,12 @@ export function useLaunches(pageSize = 12) {
             })
     },[data, filters])
 
+    const totalPages = Math.max(1 , Math.ceil(filtered.length / pageSize))
+    const pageItems = useMemo(() => {
+        const start  = (page - 1) * pageSize
+        return filtered.slice(start , start + pageSize)
+    } , [filtered , page , pageSize])
+
     return { loading ,  error , filters , setFilters , page , setPage , all: data ?? [] }
 }
     
