@@ -41,6 +41,12 @@ export function useLaunches(pageSize = 12) {
         return filtered.slice(start , start + pageSize)
     } , [filtered , page , pageSize])
 
-    return { loading ,  error , filters , setFilters , page , setPage , all: data ?? [] }
+    const years = useMemo(() => {
+        const s = new Set<string>()
+        ;(data ?? []).forEach(l => s.add(new Date(l.date_utc).getUTCFullYear().toString()))
+        return Array.from(s).sort((a, b) => Number(b) - Number(a))
+    }, [data])
+
+    return { loading ,  error , items: pageItems, page , totalPages , years , filters , setFilters , setPage , all: data ?? [] }
 }
     
