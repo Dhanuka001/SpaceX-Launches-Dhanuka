@@ -12,28 +12,34 @@ type Props = {
 export default function LaunchCard({launch , isFavorite , onToggleFavorite }: Props) {
 
     return (
-        <article>
-            <header>
-                <h3>
-                    <Link to={`/launch/${launch.id}`}>{launch.name}</Link>
+        <article className="border rounded-xl p-4 flex flex-col gap-2">
+            <header className="flex justify-between items-center">
+                <h3 className="font-semibold text-lg">
+                    <Link to={`/launch/${launch.id}`} className="hover:underline">{launch.name}</Link>
                 </h3>
 
                 <button
                     aria-label={isFavorite ? 'Unfavorite launch' : 'Favorite Launch'}
                     onClick={() => onToggleFavorite(launch.id)}
+                    className={`
+                        hover:bg-yellow-100
+                        focus:outline-none  focus:rind-yellow-400
+                        ${isFavorite ? 'bg-yellow-50 border-yellow-300' : 'bg-white border-gray-300'}
+                        `}
                 >
                     {isFavorite ? (
-                        <FaStar color="gold" size={20}/>
+                        <FaStar className="text-yellow-500" size={20}/>
                     ) : (
-                        <FaRegStar color="gray" size={20}/>
+                        <FaRegStar className="text-gray-400" size={20}/>
                     )}
 
                 </button>  
             </header>
 
-            <div>{formatLocalDate(launch.date_utc)}</div>
+            <div className="text-sm text-gray-500">{formatLocalDate(launch.date_utc)}</div>
 
-            <span>
+            <span className={`text-xs px-2 py-0.5 rounded-full w-max font-medium
+                ${launch.success === true ? 'bg-green-100 text-green-600' : launch.success === false ? 'bg-red-100 text-red-600' : 'bg-gray-100'}`}>
                 {launch.success === true ? 'Success' : launch.success === false ? 'Failed' : 'TBD'}
             </span>
        
