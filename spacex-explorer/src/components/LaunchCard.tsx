@@ -12,7 +12,7 @@ type Props = {
 export default function LaunchCard({launch , isFavorite , onToggleFavorite }: Props) {
 
     return (
-        <article className="border border-gray-300 rounded-xl p-4 flex flex-col gap-2">
+        <article className="border border-gray-300 rounded-xl p-4 flex flex-col gap-2 min-w-[300px]">
             <header className="flex justify-between items-center">
                 <h3 className="font-semibold text-lg">
                     <Link to={`/launch/${launch.id}`} className="hover:underline">{launch.name}</Link>
