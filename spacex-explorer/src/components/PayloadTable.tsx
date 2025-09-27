@@ -5,9 +5,9 @@ export default function PayloadTable({ items }: { items: Payload[] }) {
     if(!items.length) return <p>Opps! No payloads found.</p>
 
     return(
-    <div role="region" aria-label="payloads" className="overflow-x-auto shadow rounded-lg border border-gray-200">
+    <div role="region" aria-label="payloads" className="overflow-x-auto shadow  border border-gray-600">
       <table className="w-full text-sm text-left">
-        <thead className="bg-gray-50 text-gray-700 uppercase text-xs font-semibold">
+        <thead className="bg-gray-50 text-gray-700 uppercase text-xs font-semibold border-b border-gray-300">
           <tr>
             <th className="px-4 py-3">Name</th>
             <th className="px-4 py-3">Type</th>
