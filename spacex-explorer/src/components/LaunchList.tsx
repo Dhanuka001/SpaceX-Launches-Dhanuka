@@ -11,7 +11,7 @@ export default function LaunchList() {
     const favSet = useMemo(() => new Set(favorites) , [favorites])
 
     const toggleFav = useCallback((id: string) => {
-        setFavorites(prev => prev.includes(id) ? prev.filter(fav => fav ! == id) : [...prev ,id])
+        setFavorites(prev => prev.includes(id) ? prev.filter(fav => fav !== id) : [...prev ,id])
     }, [setFavorites])
 
     if (error) return (
