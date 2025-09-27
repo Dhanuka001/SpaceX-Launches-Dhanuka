@@ -15,8 +15,8 @@ export default function LaunchList() {
     }, [setFavorites])
 
     if (error) return (
-        <div role="alert" className="p-4 border rounded">
-            <p>Failed to load launches.</p>
+        <div role="alert" className="flex flex-col items-center justify-center text-center p-8 bg-red-50  border border-red-200 rounded-lg shadow-sm">
+            <p className="text-red-700 font-semibold text-lg mb-3">Failed to load launches.</p>
             <button className="border rounded px py-1" onClick={() => location.reload()}>Retry</button>
         </div>
     )
