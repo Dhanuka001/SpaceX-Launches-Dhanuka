@@ -12,7 +12,9 @@ type Props = {
 export default function LaunchCard({launch , isFavorite , onToggleFavorite }: Props) {
 
     return (
-        <article className="border border-gray-300 rounded-xl p-4 flex flex-col gap-2 min-w-[300px]">
+        <Link
+            to={`/launch/${launch.id}`}
+            className="border border-gray-300 rounded-xl p-4 flex flex-col gap-2 min-w-[300px] transition transform hover:-translate-y-1 hover:scale-105 hover:shadow-lg">
             <header className="flex justify-between items-center">
                 <h3 className="font-semibold text-lg">
                     <Link to={`/launch/${launch.id}`} className="hover:underline">{launch.name}</Link>
@@ -43,6 +45,6 @@ export default function LaunchCard({launch , isFavorite , onToggleFavorite }: Pr
                 {launch.success === true ? 'Success' : launch.success === false ? 'Failed' : 'TBD'}
             </span>
        
-        </article>
+        </Link>
     )
 }
