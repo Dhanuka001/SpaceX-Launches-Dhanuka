@@ -38,7 +38,7 @@ export default function LaunchCard({launch , isFavorite , onToggleFavorite }: Pr
                 </button>  
             </header>
 
-            <div className="text-sm text-gray-500">{formatLocalDate(launch.date_utc)}</div>
+            <div className="text-xs text-gray-500">{formatLocalDate(launch.date_utc)}</div>
 
             <span className={`text-xs px-2 py-0.5 rounded-full w-max font-medium
                 ${launch.success === true ? 'bg-green-100 text-green-600' : launch.success === false ? 'bg-red-100 text-red-600' : 'bg-gray-100'}`}>
