@@ -13,18 +13,27 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
     const set = useCallback((patch: Partial<Filters>) => onChange(patch), [onChange])
 
     return (
-        <form aria-label="filters" className="grid gap-3 sm:grid-cols-4">
-            <input
-                aria-label="search"
-                className="border rounded px-3 py-2"
-                placeholder="Search by mission..."
-                value={filters.query}
-                onChange={(e) => set({query : e.target.value})}
-            />
-
-            <select
+        <form aria-label="filters" className="flex flex-wrap gap-3 items-center">
+            <div className="flex flex-1 min-w-[250px] gap-2">
+                <input
+                    aria-label="search"
+                    className="flex-grow border rounded px-3 py-2"
+                    placeholder="Search by mission..."
+                    value={filters.query}
+                    onChange={(e) => set({query : e.target.value})}
+                />
+                <button
+                    type="submit"
+                    className="flex items-center gap-1 bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+                >
+                Search
+                </button>
+            </div>
+        
+            <div className="flex gap-3 text-sm">
+                <select
                 aria-label="year"
-                className="border rounded px-3 py-2"
+                className="border border-gray-300 rounded-md px-2 py-2 bg-gray-50 hover:bg-gray-100 focus:outline-none"
                 value={filters.year}
                 onChange={(e) => set({ year: e.target.value as any})}
             >
@@ -34,7 +43,7 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
 
             <select
                 aria-label="status"
-                className="border rounded px-3 py-2"
+                className="border border-gray-300 rounded-md px-2 py-2 bg-gray-50 hover:bg-gray-100 focus:outline-none"
                 value={filters.status}
                 onChange={(e) => set({ status: e.target.value as any})}
             >
@@ -45,7 +54,7 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
 
             <select
                 aria-label="sort"
-                className="border rounded px-3 py-2"
+                className="border border-gray-300 rounded-md px-2 py-2 bg-gray-50 hover:bg-gray-100 focus:outline-none"
                 value={filters.sort}
                 onChange={(e) => set({ sort: e.target.value as any})}
             >
@@ -53,6 +62,8 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
                 <option value="oldest">Oldest → Newest</option>
             </select>
                 
+            </div>
+          
         </form>
     )
 }
