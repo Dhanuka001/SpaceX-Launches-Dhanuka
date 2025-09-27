@@ -1,6 +1,7 @@
 import { useParams , Link} from 'react-router-dom'
 import { useFetch } from '../hooks/useFetch'
 import { endpoints } from '../api/spacex'
+import { usePayloads } from '../hooks/usePayloads'
 import type { Launch , Rocket , Launchpad , Payload } from '../types/spacex'
 import LaunchSkeleton from '../components/LaunchSkeleton'
 import PayloadTable from '../components/PayloadTable'
@@ -13,14 +14,8 @@ export default function LaunchDetailsPage() {
     const rocket = useFetch<Launch>({ url : launch.data ? `${endpoints.rockets}/${launch.data.rocket}` : null})
     const launchpad = useFetch<Launchpad>({ url: launch.data ? `${endpoints.launchpads}/${launch.data.launchpad}` : null})
 
-    // fetch payloads individually
-    const payloadResults = (launch.data?.payloads ?? []).map(pid =>
-        useFetch<Payload>({ url: `${endpoints.payloads}/${pid}` })
-    )
+   const { data: payloads, loading: payloadLoading, error: payloadError } = usePayloads(launch.data?.payloads)
 
-    const payloadLoading = payloadResults.some(r => r.loading)
-    const payloadError = payloadResults.find(r => r.error)?.error
-    const payloads = payloadResults.map(r => r.data).filter(Boolean) as Payload[]
 
     if(launch.loading) return <LaunchSkeleton />
     if(launch.error || !launch.data) return (
