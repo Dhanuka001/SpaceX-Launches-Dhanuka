@@ -4,7 +4,7 @@ export default function FavoritesSkeleton() {
       {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
-          className="border rounded-lg p-4 animate-pulse space-y-3"
+          className="border border-gray-300 rounded-lg p-4 animate-pulse space-y-3"
         >
           {/* Title */}
           <div className="h-5 w-2/3 bg-gray-200 rounded" />

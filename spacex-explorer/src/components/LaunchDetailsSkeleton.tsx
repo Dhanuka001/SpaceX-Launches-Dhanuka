@@ -1,6 +1,6 @@
 export default function LaunchDetailsSkeleton() {
   return (
-    <div className="w-full min-w-xl mx-auto border rounded-lg p-6 animate-pulse space-y-4">
+    <div className="w-full min-w-xl mx-auto border border-gray-300 rounded-lg p-6 animate-pulse space-y-4">
       {/* Title */}
       <div className="h-6 w-1/3 bg-gray-200 rounded" />
 
