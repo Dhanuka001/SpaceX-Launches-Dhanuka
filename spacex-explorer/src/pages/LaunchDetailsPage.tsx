@@ -3,9 +3,9 @@ import { useFetch } from '../hooks/useFetch'
 import { endpoints } from '../api/spacex'
 import { usePayloads } from '../hooks/usePayloads'
 import type { Launch , Rocket , Launchpad , Payload } from '../types/spacex'
-import LaunchSkeleton from '../components/LaunchSkeleton'
 import PayloadTable from '../components/PayloadTable'
 import { formatLocalDate } from '../utils/format'
+import LaunchDetailsSkeleton from '../components/LaunchDetailsSkeleton'
 
 export default function LaunchDetailsPage() {
     const { id } = useParams()
@@ -17,25 +17,25 @@ export default function LaunchDetailsPage() {
    const { data: payloads, loading: payloadLoading, error: payloadError } = usePayloads(launch.data?.payloads)
 
 
-    if(launch.loading) return <LaunchSkeleton />
+    if(launch.loading) return <LaunchDetailsSkeleton />
     if(launch.error || !launch.data) return (
-        <div role="alert">
-            <p>Failed to load launch.</p>
-            <Link to="/">Back</Link>
+        <div role="alert" className="p-4 border rounded">
+            <p className="mb-2">Failed to load launch.</p>
+            <Link className="text-blue-600 underline" to="/">Back</Link>
         </div>
     )
 
     const l = launch.data
 
     return (
-        <div>
-            <Link to="/">← Back</Link>
-            <h1>{l.name}</h1>
-            <div>{formatLocalDate(l.date_utc)}</div>
+        <div className="grid gap-4">
+            <Link to="/" className="text-blue-600 underline">← Back</Link>
+            <h1 className="text-2xl font-semibold">{l.name}</h1>
+            <div className="text-gray-700">{formatLocalDate(l.date_utc)}</div>
             {l.details && <p>{l.details}</p>}
 
             <section>
-                <h2>Rocket</h2>
+                <h2 className="font-semibold mb-1">Rocket</h2>
                 {rocket.loading ? <div>Loading rocket...</div> : 
                     rocket.error ? <p role="alert">Failed to load rocket...</p> :
                     rocket.data ? <p>{rocket.data.name}</p> : null
@@ -43,7 +43,7 @@ export default function LaunchDetailsPage() {
             </section>
 
             <section>
-                <h2>Launchpad</h2>
+                <h2 className="font-semibold mb-1">Launchpad</h2>
                 {launchpad.loading ? <div>Loading launchpad...</div> : 
                     launchpad.error ? <p role="alert">Failed to load launchpad</p> :
                     launchpad.data ? <p>{launchpad.data.name} - {launchpad.data.locality}, {launchpad.data.region}</p> : null
@@ -51,7 +51,7 @@ export default function LaunchDetailsPage() {
             </section>
 
             <section>
-                <h2>Payloads</h2>
+                <h2 className="font-semibold mb-2">Payloads</h2>
                 {payloadLoading && <div>Loading payloads...</div>}
                 {payloadError && <p role="alert">Failed to load payloads...</p>}
                 {!payloadLoading && !payloadError && <PayloadTable items={payloads}/>}
