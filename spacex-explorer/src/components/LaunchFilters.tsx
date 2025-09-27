@@ -13,9 +13,10 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
     const set = useCallback((patch: Partial<Filters>) => onChange(patch), [onChange])
 
     return (
-        <form aria-label="filters">
+        <form aria-label="filters" className="grid gap-3 sm:grid-cols-4">
             <input
                 aria-label="search"
+                className="border rounded px-3 py-2"
                 placeholder="Search by mission..."
                 value={filters.query}
                 onChange={(e) => set({query : e.target.value})}
@@ -23,6 +24,7 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
 
             <select
                 aria-label="year"
+                className="border rounded px-3 py-2"
                 value={filters.year}
                 onChange={(e) => set({ year: e.target.value as any})}
             >
@@ -32,6 +34,7 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
 
             <select
                 aria-label="status"
+                className="border rounded px-3 py-2"
                 value={filters.status}
                 onChange={(e) => set({ status: e.target.value as any})}
             >
@@ -42,6 +45,7 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
 
             <select
                 aria-label="sort"
+                className="border rounded px-3 py-2"
                 value={filters.sort}
                 onChange={(e) => set({ sort: e.target.value as any})}
             >
