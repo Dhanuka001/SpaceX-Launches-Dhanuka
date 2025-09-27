@@ -46,8 +46,9 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
                 onChange={(e) => set({ sort: e.target.value as any})}
             >
                 <option value="newest">Newest → Oldest</option>
-            </select>
                 <option value="oldest">Oldest → Newest</option>
+            </select>
+                
         </form>
     )
 }
