@@ -47,7 +47,7 @@ export default function LaunchList() {
 
                 <nav aria-label="pagination">
                     <button disabled={page===1} onClick={() => setPage(1)}>First</button>
-                    <button disabled={page===1} onClick={() => setPage(1)}>First</button>
+                    <button disabled={page===1} onClick={() => setPage(1)}>Prev</button>
                     <span>Page {page} / {totalPages}</span>
                     <button disabled={page===totalPages} onClick={() => setPage(page+1)}>Next</button>
                     <button disabled={page===totalPages} onClick={() => setPage(totalPages)}>Last</button>
