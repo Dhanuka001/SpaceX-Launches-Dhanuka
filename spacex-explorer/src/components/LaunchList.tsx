@@ -16,8 +16,8 @@ export default function LaunchList() {
 
     if (error) return (
         <div role="alert" className="flex flex-col items-center justify-center text-center p-8 bg-red-50  border border-red-200 rounded-lg shadow-sm">
-            <p className="text-red-700 font-semibold text-lg mb-3">Failed to load launches.</p>
-            <button className="border rounded px py-1" onClick={() => location.reload()}>Retry</button>
+            <p className="text-red-700 text-lg mb-3">Failed to load launches.</p>
+            <button className="px-5 py-2 rounded-md bg-black text-white font-medium hover:bg-gray-700 transition" onClick={() => location.reload()}>Retry</button>
         </div>
     )
     return (
