@@ -15,9 +15,9 @@ export default function LaunchList() {
     }, [setFavorites])
 
     if (error) return (
-        <div role="alert">
+        <div role="alert" className="p-4 border rounded">
             <p>Failed to load launches.</p>
-            <button onClick={() => location.reload()}>Retry</button>
+            <button className="border rounded px py-1" onClick={() => location.reload()}>Retry</button>
         </div>
     )
     return (
@@ -29,12 +29,12 @@ export default function LaunchList() {
             />
 
             {loading ? (
-                <div>
+                <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 mt-6">
                     {Array.from({length:12}).map((_,i) => <LaunchSkeleton key={i}/>)}
                 </div>
             ) : (
                 <>
-                <div>
+                <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 mt-6">
                     {items.map(l => (
                         <LaunchCard 
                             key={l.id}
@@ -45,12 +45,14 @@ export default function LaunchList() {
                     ))}
                 </div>
 
-                <nav aria-label="pagination">
-                    <button disabled={page===1} onClick={() => setPage(1)}>First</button>
-                    <button disabled={page===1} onClick={() => setPage(1)}>Prev</button>
-                    <span>Page {page} / {totalPages}</span>
-                    <button disabled={page===totalPages} onClick={() => setPage(page+1)}>Next</button>
-                    <button disabled={page===totalPages} onClick={() => setPage(totalPages)}>Last</button>
+                <nav aria-label="pagination" className="flex gap-2 justify-center mt-4  ">
+                    <button disabled={page===1} className="bg-gray-50 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(1)}>First</button>
+                    <button disabled={page===1} className="bg-gray-50 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(1)}>← Back</button>
+                    <span className="px-2 py-1">Page {page} / {totalPages}</span>
+                    <button disabled={page===totalPages} className="bg-gray-100 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(page+1)}>Next →</button>
+                    <button disabled={page===totalPages} className="bg-gray-100 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(totalPages)}>Last</button>
+                    
+                    
 
                 </nav>
              
