@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Filters } from "../hooks/useLaunches";
 
 type Props = {
@@ -12,6 +12,18 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
 
     const set = useCallback((patch: Partial<Filters>) => onChange(patch), [onChange])
 
+    // keep a local input state for query so we can debounce pushing it up
+    const [term , setTerm] = useState(filters.query)
+
+    // if parent filters.query changes (e.g., from URL), sync it down
+    useEffect(() => { setTerm(filters.query)} , [filters.query])
+
+    //debounce - when term changes , wait 300ms then update filters.query
+    useEffect(() => {
+        const t = setTimeout(() => set({ query : term}) , 300)
+        return () => clearTimeout(t)
+    }, [term , set])
+
     return (
         <form aria-label="filters" className="flex flex-wrap gap-3 items-center">
             <div className="flex flex-1 min-w-[250px] gap-2">
@@ -19,8 +31,8 @@ export default function LaunchFilters( { years , filters , onChange}: Props) {
                     aria-label="search"
                     className="flex-grow border rounded px-3 py-2"
                     placeholder="Search by mission..."
-                    value={filters.query}
-                    onChange={(e) => set({query : e.target.value})}
+                    value={term}
+                    onChange={(e) => setTerm(e.target.value)}
                 />
                 <button
                     type="submit"

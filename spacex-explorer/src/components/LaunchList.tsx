@@ -1,14 +1,47 @@
-import { useCallback , useMemo } from "react"
+import { useCallback , useMemo , useEffect , useRef } from "react"
 import LaunchCard from "./LaunchCard"
 import LaunchSkeleton from "./LaunchSkeleton"
 import LaunchFilters from "./LaunchFilters"
 import { useLocalStorage } from "../hooks/useLocalStorage"
 import { useLaunches } from "../hooks/useLaunches"
+import { useSearchParams } from "react-router-dom"
+
+function parseParams(sp: URLSearchParams) {
+    return {
+        query: sp.get('query') ?? '',
+        year: (sp.get('year') ?? 'all') as 'all' | string,
+        status: (sp.get('status') ?? 'all') as 'all' | 'success' | 'failed',
+        sort: (sp.get('sort') ?? 'newest') as 'newest' | 'oldest',
+        page: Math.max(1 , Number(sp.get('page') ?? '1'))
+    }
+}
 
 export default function LaunchList() {
     const {items , loading ,error , page , totalPages , setPage , years , filters ,setFilters } = useLaunches(12)
     const [favorites , setFavorites] = useLocalStorage<string[]>('favorites' , [])
     const favSet = useMemo(() => new Set(favorites) , [favorites])
+
+    const [searchParams ,setSearchParams] = useSearchParams()
+    const didInit = useRef(false)
+
+    //initialize from URL once
+    useEffect(() => {
+        if (didInit.current) return
+        didInit.current =  true
+        const p = parseParams(searchParams)
+        setFilters({ query: p.query, year: p.year, status: p.status , sort: p.sort})
+    }, [searchParams , setFilters , setPage])
+
+    //whenever filters/page change, write them to the URL
+    useEffect(() => {
+        const p = new URLSearchParams()
+        if (filters.query) p.set('query' , filters.query)
+        if (filters.year !== 'all') p.set('year', filters.year)
+        if (filters.status !== 'all') p.set('status' , filters.status)
+        if (filters.sort !== 'newest') p.set('sort' , filters.sort)
+        if (page !== 1) p.set('page' , String(page))
+        setSearchParams(p , { replace: true})
+    }, [filters, page ,setSearchParams])
 
     const toggleFav = useCallback((id: string) => {
         setFavorites(prev => prev.includes(id) ? prev.filter(fav => fav !== id) : [...prev ,id])
