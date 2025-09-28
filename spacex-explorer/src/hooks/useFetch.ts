@@ -3,13 +3,13 @@ import { useEffect , useRef , useState } from "react";
 type CacheMap = Map<string, unknown>
 const memoryCache: CacheMap = new Map()
 
-type UseFetchOpts<T> = {
+type UseFetchOpts = {
     url: string | null
     enabled?: boolean
     cache?: boolean
 }
 
-export function useFetch<T = unknown>({ url , enabled = true, cache = true}: UseFetchOpts<T>) {
+export function useFetch<T = unknown>({ url , enabled = true, cache = true}: UseFetchOpts) {
     const [data ,setData] = useState<T | null>(null)
     const [error , setError] = useState<Error | null>(null)
     const [loading , setLoading] = useState(false)
