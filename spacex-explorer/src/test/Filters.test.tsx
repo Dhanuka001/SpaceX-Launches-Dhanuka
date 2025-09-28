@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import React from 'react'
 import LaunchList from '../components/LaunchList'
 import { test , expect } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
