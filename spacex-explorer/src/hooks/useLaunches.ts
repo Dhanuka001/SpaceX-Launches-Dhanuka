@@ -1,4 +1,4 @@
-import { useMemo , useState } from "react";
+import { useCallback , useEffect , useMemo , useState } from "react";
 import { useFetch } from "./useFetch";
 import { endpoints } from "../api/spacex";
 import type { Launch } from "../types/spacex";
@@ -15,7 +15,7 @@ const DEFAULT: Filters = { query: '', year: 'all', status: 'all', sort: 'newest'
 export function useLaunches(pageSize = 12) {
     const { data , loading , error} = useFetch<Launch[]>({ url: endpoints.launches, cache: true})
     const [filters, setFilters] = useState<Filters>(DEFAULT)
-    const [page, setPage] = useState(1)
+    const [page, setPageState] = useState(1)
 
     const filtered = useMemo(() => {
         const launches = data ?? []
@@ -46,6 +46,18 @@ export function useLaunches(pageSize = 12) {
     },[data, filters])
 
     const totalPages = Math.max(1 , Math.ceil(filtered.length / pageSize))
+     useEffect(() => {
+        setPageState(prev => Math.min(Math.max(1 , prev) , totalPages))
+    } , [totalPages])
+
+    const setPage = useCallback((next: number | ((prev: number) => number)) => {
+        setPageState(prev => {
+            const candidate = typeof next === 'function' ? (next as (prev: number) => number)(prev) : next
+            if (!Number.isFinite(candidate)) return prev
+            const normalized = Math.round(candidate)
+            return Math.min(totalPages , Math.max(1 , normalized))
+        })
+    } , [totalPages])
     const pageItems = useMemo(() => {
         const start  = (page - 1) * pageSize
         return filtered.slice(start , start + pageSize)
