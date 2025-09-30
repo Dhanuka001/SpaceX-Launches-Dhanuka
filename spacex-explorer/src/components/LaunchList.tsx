@@ -4,6 +4,7 @@ import LaunchSkeleton from "./LaunchSkeleton"
 import LaunchFilters from "./LaunchFilters"
 import { useLocalStorage } from "../hooks/useLocalStorage"
 import { useLaunches } from "../hooks/useLaunches"
+import type { Filters } from "../hooks/useLaunches"
 import { useSearchParams } from "react-router-dom"
 
 function parseParams(sp: URLSearchParams) {
@@ -24,12 +25,32 @@ export default function LaunchList() {
     const [searchParams ,setSearchParams] = useSearchParams()
     const didInit = useRef(false)
 
+    const handleFiltersChange = useCallback((patch: Partial<Filters>) => {
+        let didChange = false
+        setFilters(prev => {
+            const next = { ...prev , ...patch }
+            for (const key of Object.keys(patch) as (keyof Filters)[]) {
+                const value = patch[key]
+                if (value !== undefined && prev[key] !== value) {
+                    didChange = true
+                    break
+                }
+            }
+            return didChange ? next : prev
+        })
+        if (didChange) {
+            setPage(1)
+        }
+    } , [setFilters , setPage])
+
+
     //initialize from URL once
     useEffect(() => {
         if (didInit.current) return
         didInit.current =  true
         const p = parseParams(searchParams)
         setFilters({ query: p.query, year: p.year, status: p.status , sort: p.sort})
+        setPage(p.page)
     }, [searchParams , setFilters , setPage])
 
     //whenever filters/page change, write them to the URL
@@ -58,7 +79,7 @@ export default function LaunchList() {
             <LaunchFilters 
                 years={years}
                 filters={filters}
-                onChange={(patch) => { setFilters({ ...filters , ...patch }); setPage(1) }}
+                onChange={handleFiltersChange}
             />
 
             {loading ? (
@@ -88,9 +109,9 @@ export default function LaunchList() {
                {items.length > 0 && (
                      <nav aria-label="pagination" className="flex gap-2 justify-center mt-4  ">
                     <button disabled={page===1} className="bg-gray-50 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(1)}>First</button>
-                    <button disabled={page===1} className="bg-gray-50 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(1)}>← Back</button>
+                    <button disabled={page===1} className="bg-gray-50 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(prev => prev - 1)}>← Back</button>
                     <span className="px-2 py-1">Page {page} / {totalPages}</span>
-                    <button disabled={page===totalPages} className="bg-gray-100 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(page+1)}>Next →</button>
+                    <button disabled={page===totalPages} className="bg-gray-100 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(prev => prev + 1)}>Next →</button>
                     <button disabled={page===totalPages} className="bg-gray-100 rounded-md px-2 py-1 disabled:opacity-50 hover:bg-black hover:text-white" onClick={() => setPage(totalPages)}>Last</button>
                 </nav>
                )}  
